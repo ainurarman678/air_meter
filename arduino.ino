@@ -6,14 +6,14 @@
 #define PRINT_DATA_TO_SERIAL 1
 #define ONE_WIRE_BUS 3
 #define DHT11_PIN 2
-#define SENSOR_MQ A1
+//#define SENSOR_MQ A1
 dht DHT;
 OneWire oneWire(ONE_WIRE_BUS); 
 DallasTemperature sensors(&oneWire);
 String temp1, temp2, humidity1, rawData;
 int temp1Raw, temp2Raw, humidity1Raw;
 char c, data[17];
-int sensorMqData;
+//int sensorMqData;
 int sendReady = 0;
 
 void setup() {
@@ -45,7 +45,7 @@ void loop() {
   sensors.requestTemperatures();
   temp1Raw = sensors.getTempCByIndex(0);
   int chk = DHT.read11(DHT11_PIN);
-  sensorMqData = analogRead(SENSOR_MQ);
+  //sensorMqData = analogRead(SENSOR_MQ);
   switch (chk)
   {
     case DHTLIB_OK:  
@@ -88,11 +88,11 @@ void loop() {
     Serial.print("Humidity 1 Sensor Output : ");
     Serial.println(humidity1);
     Serial.print("Gas PPM : ");
-    Serial.println(sensorMqData);
-    Serial.println(rawData);
+    //Serial.println(sensorMqData);
+    //Serial.println(rawData);
     Serial.println("");
   }
-  rawData = "*" + temp1 + "," + temp2 + "," + humidity1 + "," + sensorMqData + "#";
+  rawData = "*" + temp1 + "," + temp2 + "," + humidity1 + "#";
   delay(1000);
 }
 
