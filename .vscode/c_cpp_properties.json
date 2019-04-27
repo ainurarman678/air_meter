@@ -4,13 +4,13 @@
             "name": "Win32",
             "includePath": [
                 "C:\\Users\\DESKTOP-PC\\AppData\\Local\\Arduino15\\packages\\esp8266\\tools\\**",
+                "C:\\Users\\DESKTOP-PC\\Documents\\Arduino\\libraries\\**",
                 "C:\\Users\\DESKTOP-PC\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\2.4.2\\**",
                 "C:\\\\Program Files (x86)\\\\Arduino\\\\tools\\\\**",
-                "C:\\\\Program Files (x86)\\\\Arduino\\\\hardware\\\\arduino\\\\avr\\\\**"
+                "C:\\\\Program Files (x86)\\\\Arduino\\\\hardware\\\\arduino\\\\avr\\\\**",
+                "${workspaceRoot}"
             ],
-            "forcedInclude": [
-                "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\cores\\arduino\\Arduino.h"
-            ],
+            "forcedInclude": [],
             "intelliSenseMode": "msvc-x64"
         }
     ],
