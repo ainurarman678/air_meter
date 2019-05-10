@@ -24,8 +24,8 @@ unsigned long prevNTP = 0;
 unsigned long lastNTPResponse = millis();
 unsigned long prevActualTime = 0;
 uint32_t timeUNIX = 0;
-int temp1, temp2, humidity1, ppm1;
-int timeM, timeH,dateD, dateM, dateH;
+int temp1, temp2, humidity1, ppm1, timeH0;
+String timeM, timeH;
 String dateTime, dateRaw, timeRaw;
 String dataIn;
 String dt[10];
@@ -34,9 +34,7 @@ boolean parsing=false;
 char inChar;
 String tempActual, humidityActual, ppmActual, timeString;
 String ssid, ipaddr;
-String AP1 = "Ini WiFi Ane";
-String AP2 = "LABTIK";
-String AP3 = "WiFi MTCNA";
+String AP1 = "LABTIK";
 
 void setup() {
   Wire.begin(D1, D2);
@@ -82,8 +80,23 @@ void loop() {
   uint32_t actualTime = timeUNIX + (currentMillis - lastNTPResponse) / 1000;
   if (actualTime != prevActualTime && timeUNIX != 0) {
     prevActualTime = actualTime;
-    timeRaw = getHours(actualTime) + ":" + getMinutes(actualTime);
-    timeString = "Data diambil pada waktu" + timeRaw;
+    if ( (getHours(actualTime) + 7) > 24 ){
+      timeH0 = (getHours(actualTime) + 7) - 24;
+    } else{
+      timeH0 = getHours(actualTime) + 7;
+    }
+    if ( timeH0 < 10 ){
+      timeH = "0" + String(timeH0);
+    }else{
+      timeH = String(timeH0);
+    }
+    if( getMinutes(actualTime) < 10 ){
+      timeM = "0" + String(getMinutes(actualTime));
+    }else{
+      timeM = String(getMinutes(actualTime));
+    }
+    timeRaw = timeH + ":" + timeM;
+    timeString = "Data diambil pada waktu " + timeRaw;
   }
   Wire.requestFrom(8, 14);
   while(Wire.available()){
@@ -98,7 +111,7 @@ void loop() {
         dataIn="";
     }
   }
-  tempActual = "Suhu saat ini adalah " + String(temp1) + "C";
+  tempActual = "Suhu saat ini adalah " + String(temp2) + "C";
   humidityActual = "Kelembapan saat ini adalah " + String(humidity1) +"%";
   //ppmActual = "Kualitas udara " + String(ppm1) + "PPM";
 }
@@ -126,9 +139,10 @@ void Bot_ExecMessages() {
       //bot.sendMessage(bot.message[i][4], ppmActual, "");
       bot.sendMessage(bot.message[i][4], timeString, "");
     }
-//    if ( bot.message[i][5] == "wifistatus" ) {
-//      
-//    }
+    if ( bot.message[i][5] == "wifistatus" ) {
+      bot.sendMessage(bot.message[i][4], "Modul terkoneksi dengan " + AP1, "");
+      bot.sendMessage(bot.message[i][4], "Alamat IP = " + WiFi.localIP(), "");
+    }
     if ( bot.message[i][5] == "start" ) {
       bot.sendMessage(bot.message[i][4], "Bot ini merupakan sebuah klien untuk menerima data dari sensor.", "");
       bot.sendMessage(bot.message[i][4], "/get untuk menarik data sensor.", "");
@@ -204,5 +218,4 @@ void parsingData(){
   temp1 = dt[0].toInt();
   temp2 = dt[1].toInt();
   humidity1 = dt[2].toInt();
-  ppm1 = dt[3].toInt();
 }
